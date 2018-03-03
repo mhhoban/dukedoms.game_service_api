@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: Dukedoms of Daleria Game Service API
+  version: 0.1.0
+
+paths:
+  /newGame:
+    post:
+      tags:
+        - NewGame
+      summary: create new Game
+      operationId: createNewGame
+      parameters:
+        - name: hostId
+          in: query
+          description: accountId for player creating game
+          required: true
+          schema:
+            type: integer
+        - name: invitedPlayers
+          in: query
+          description: accountIds of players to invite to the game
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Player unauthorized to create game
