@@ -10,23 +10,70 @@ paths:
         - NewGame
       summary: create new Game
       operationId: createNewGame
-      parameters:
-        - name: hostId
-          in: query
-          description: accountId for player creating game
-          required: true
-          schema:
-            type: integer
-        - name: invitedPlayers
-          in: query
-          description: accountIds of players to invite to the game
-          required: true
-          schema:
-            type: array
-            items:
-              type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host_player:
+                  type: string
+                invited_players:
+                  type: string
       responses:
         '200':
-          description: OK
-        '401':
-          description: Player unauthorized to create game
+          description: game successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  game_created:
+                    type: boolean
+                  game_id:
+                    type: integer
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  game_created:
+                    type: boolean
+                  reason:
+                    type: string
+  /getGame:
+    get:
+      tags:
+        - GetGame
+      summary: get info on existing game
+      operationId: getGame
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          description: id of the game to fetch
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: the game requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  game_id:
+                    type: integer
+                  game_state:
+                    type: string
+                  players:
+                    type: object
+                    properties:
+                      host_player:
+                        type: string
+                      invited_players:
+                        type: string
