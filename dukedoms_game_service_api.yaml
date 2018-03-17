@@ -1,4 +1,4 @@
-openapi: 3.0.0
+swagger: "2.0"
 info:
   title: Dukedoms of Daleria Game Service API
   version: 0.1.0
@@ -6,74 +6,43 @@ info:
 paths:
   /newGame:
     post:
-      tags:
-        - NewGame
       summary: create new Game
-      operationId: createNewGame
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                host_player:
-                  type: string
-                invited_players:
-                  type: string
-      responses:
-        '200':
-          description: game successfully created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  game_created:
-                    type: boolean
-                  game_id:
-                    type: integer
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  game_created:
-                    type: boolean
-                  reason:
-                    type: string
-  /getGame:
-    get:
-      tags:
-        - GetGame
-      summary: get info on existing game
-      operationId: getGame
+      x-swagger-router-controller: controllers.game_endpoints
+      operationId: create_new_game
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
-        - name: gameId
-          in: path
-          required: true
-          description: id of the game to fetch
+        - in: body
+          name: newGameRequest
+          description: request to start process of making new game
           schema:
-            type: integer
-            minimum: 1
+            type: object
+            required:
+              - hostPlayer
+              - invitedPlayers
+            properties:
+              hostPlayer:
+                type: string
+              invitedPlayers:
+                type: string
       responses:
-        '200':
-          description: the game requested
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  game_id:
-                    type: integer
-                  game_state:
-                    type: string
-                  players:
-                    type: object
-                    properties:
-                      host_player:
-                        type: string
-                      invited_players:
-                        type: string
+        200:
+          description: game successfully created
+          schema:
+            type: object
+            properties:
+              gameCreated:
+                type: boolean
+              gameId:
+                type: integer
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              gameCreated:
+                type: boolean
+              reason:
+                type: string
