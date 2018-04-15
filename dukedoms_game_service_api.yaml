@@ -7,10 +7,10 @@ paths:
   /newGame:
     post:
       summary: create new Game
-      x-swagger-router-controller: controllers.game_endpoints
+      x-swagger-router-controller: controllers.game_operations
       operationId: create_new_game
       tags:
-        - newGame
+        - gameOperations
       consumes:
         - application/json
       produces:
@@ -30,13 +30,55 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/NewGameFailedResponse'
-
+  /acceptInvite:
+    post:
+      summary: accept an invite
+      x-swagger-router-controller: controllers.game_operations
+      operationId: accept_invite
+      tags:
+        - gameOperations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: gameInviteAcceptance
+          description: data for player accepting the game invite
+          required: true
+          schema:
+            $ref: '#/definitions/InviteResponse'
+      responses:
+        200:
+          description: successfully joined game
+          schema:
+            $ref: '#/definitions/NewGameWelcomePacket'
+  /declineInvite:
+    post:
+      summary: decline a game invite
+      x-swagger-router-controller: controllers.game_operations
+      operationId: decline_invite
+      tags:
+        - gameOperations
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: gameInviteRejection
+          description: data for player rejecting the game invite
+          required: true
+          schema:
+            $ref: '#/definitions/InviteResponse'
+      responses:
+        200:
+          description: successfully declined game
+          
   /getGame/{gameId}:
     get:
-      x-swagger-router-controller: controllers.game_endpoints
+      x-swagger-router-controller: controllers.game_info
       operationId: get_game_info
       tags:
-        - getGame
+        - gameInfo
       summary: gets game data by its gameId
       parameters:
         - in: path
@@ -53,6 +95,20 @@ paths:
             $ref: '#/definitions/GameInfo'
 
 definitions:
+  InviteResponse:
+    type: object
+    properties:
+      gameId:
+        type: integer
+      playerEmail:
+        type: string
+  NewGameWelcomePacket:
+    type: object
+    properties:
+      gameId:
+        type: integer
+      playerId:
+        type: integer
   NewGameRequest:
     type: object
     required:
