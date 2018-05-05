@@ -93,8 +93,55 @@ paths:
           description: game successfully retrieved
           schema:
             $ref: '#/definitions/GameInfo'
+  /endTurn:
+    post:
+      x-swagger-router-controller: controllers.game_operations
+      operationId: end_player_turn
+      tags:
+        - gameOperations
+      summary: end a player's turn and and start next player turn
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: endTurnRequest
+          schema:
+            $ref: '#/definitions/EndTurnRequest'
+      responses:
+        200:
+          description: Turn successfully ended
+
+  /getPlayerId:
+    get:
+      x-swagger-router-controller: controllers.game_info
+      operationId: get_player_id
+      tags:
+        - gameInfo
+      parameters:
+        - in: query
+          name: gameId
+          type: integer
+          required: true
+        - in: query
+          name: playerEmail
+          type: string
+          required: true
+      responses:
+        200:
+          description: playerId found
+          schema:
+            $ref: '#/definitions/PlayerId'
 
 definitions:
+  EndTurnRequest:
+    type: object
+    properties:
+      gameId:
+        type: integer
+      playerId:
+        type: integer
+      playerEmail:
+        type: string
   InviteResponse:
     type: object
     properties:
@@ -115,10 +162,13 @@ definitions:
     type: object
     required:
       - hostPlayer
+      - hostPlayerId
       - invitedPlayers
     properties:
       hostPlayer:
         type: string
+      hostPlayerId:
+        type: integer
       invitedPlayers:
         type: object
   NewGameSuccessResponse:
@@ -155,3 +205,8 @@ definitions:
             type: object
       gameState:
         type: string
+  PlayerId:
+    type: object
+    properties:
+      playerId:
+        type: integer
