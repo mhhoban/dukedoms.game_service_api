@@ -7,10 +7,10 @@ paths:
   /newGame:
     post:
       summary: create new Game
-      x-swagger-router-controller: controllers.game_operations
+      x-swagger-router-controller: controllers.game_creation
       operationId: create_new_game
       tags:
-        - gameOperations
+        - gameCreation
       consumes:
         - application/json
       produces:
@@ -33,10 +33,10 @@ paths:
   /acceptInvite:
     post:
       summary: accept an invite
-      x-swagger-router-controller: controllers.game_operations
+      x-swagger-router-controller: controllers.game_creation
       operationId: accept_invite
       tags:
-        - gameOperations
+        - gameCreation
       consumes:
         - application/json
       produces:
@@ -56,10 +56,10 @@ paths:
   /declineInvite:
     post:
       summary: decline a game invite
-      x-swagger-router-controller: controllers.game_operations
+      x-swagger-router-controller: controllers.game_creation
       operationId: decline_invite
       tags:
-        - gameOperations
+        - gameCreation
       consumes:
         - application/json
       parameters:
@@ -170,7 +170,9 @@ definitions:
       hostPlayerId:
         type: integer
       invitedPlayers:
-        type: object
+        type: array
+        items:
+          type: string
   NewGameSuccessResponse:
       type: object
       properties:
@@ -196,13 +198,21 @@ definitions:
           hostPlayer:
             type: string
           invitedPlayers:
-            type: object
+            type: array
+            items:
+              type: string
           acceptedPlayers:
-            type: object
+            type: array
+            items:
+              type: string
           pendingPlayers:
-            type: object
+            type: array
+            items:
+              type: string
           declinedPlayers:
-            type: object
+            type: array
+            items:
+              type: string
       gameState:
         type: string
   PlayerId:
